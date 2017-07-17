@@ -7,8 +7,6 @@ Telenor Handset Model w/ Product-based Neural Networks
 ### Implementation
 This paper has a [github repo][repo] with implementations of models discussed in the paper. This handset-model-product-nn repo includes the paper's files with my modifications (the original files have no comments, the comments in the modified files describe my modifications).
 
-_note: models.py also includes implementations of other types of models (for comparison)_
-
 [paper]: https://arxiv.org/pdf/1611.00144.pdf
 [repo]: https://github.com/Atomu2014/product-nets
 

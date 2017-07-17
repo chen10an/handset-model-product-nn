@@ -3,7 +3,6 @@ Telenor Handset Model w/ Product-based Neural Networks
 
 ## Paper
 [_Product-based Neural Networks for User Response Prediction_][paper]
-![PNN Diagram](quiver-image-url/B06EF60B39897EE320BCE26CFB1F498E.jpg =500x)
 
 ### Implementation
 This paper has a [github repo][repo] with implementations of models discussed in the paper. This handset-model-product-nn repo includes the paper's files with my modifications (the original files have no comments, the comments in the modified files describe my modifications).
@@ -32,6 +31,7 @@ test_data = utils.SX_TEST, utils.Y_TEST
 ```
 [utils]: https://github.com/chen10an/handset-model-product-nn/blob/master/product_nets_master/python/utils.py
 
+---
 ## Possible Settings in main.py
 ```py
 min_round = 1

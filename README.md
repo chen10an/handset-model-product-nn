@@ -15,7 +15,9 @@ This paper has a [github repo][repo] with implementations of models discussed in
 * all _categorical_ features from handset_data_train_wo_X.csv
 * one-hot (encoded as 0/1)
 * using oversampling batch generator
-* reproduce results: split id=2
+* reproduce [results][results]: split id=2
+
+[results]: https://github.com/chen10an/handset-model-product-nn/blob/master/split2_results.md
 
 ### Input for main.py using split 2 (from [utils.py][utils])
 * SX_TRAIN: scipy.sparse.csr.csr_matrix, (466632, 756)

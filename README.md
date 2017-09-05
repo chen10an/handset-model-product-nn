@@ -1,83 +1,39 @@
 # handset-model-product-nn
-Telenor Handset Model w/ Product-based Neural Networks
+Telenor Handset Model with Product-based Neural Networks
 
-## Paper
-[_Product-based Neural Networks for User Response Prediction_][paper]
+This repository explores a binary classification problem through...
+1. feature selection
+2. xgboost
+3. wide&deep (Google)
+4. complementary neural networks (cmtnn)
+5. **product-based neural networks (pnn)** (main focus)
 
-### Implementation
-This paper has a [github repo][repo] with implementations of models discussed in the paper. This handset-model-product-nn repo includes the paper's files with my modifications (the original files have no comments, the comments in the modified files describe my modifications).
+_note 1: the relevant papers are included in the papers directory_
+_note 2: the company data has not been included in this repository_
 
-[paper]: https://arxiv.org/pdf/1611.00144.pdf
-[repo]: https://github.com/Atomu2014/product-nets
+For an **overview**, refer to the presentation directory.
 
----
-## Data and Preprocessing (from handset_model_copy4.py)
-* all _categorical_ features from handset_data_train_wo_X.csv
-* one-hot (encoded as 0/1)
-* using oversampling batch generator
-* reproduce [results][results]: split id=2
-
-[results]: https://github.com/chen10an/handset-model-product-nn/blob/master/split2_results.md
-
-### Input for main.py using split 2 (from [utils.py][utils])
-* SX_TRAIN: scipy.sparse.csr.csr_matrix, (466632, 756)
-* Y_TRAIN: numpy.ndarray, 466632
-* SX_TEST: scipy.sparse.csr.csr_matrix, (116659, 756)
-* Y_TEST: numpy.ndarray, 116659
-
-```py
-train_data = utils.SX_TRAIN, utils.Y_TRAIN
-test_data = utils.SX_TEST, utils.Y_TEST
-```
-[utils]: https://github.com/chen10an/handset-model-product-nn/blob/master/product_nets_master/python/utils.py
+The specific **results** obtained from different models are in the results directory.
 
 ---
-## Possible Settings in main.py
-```py
-min_round = 1
-num_round = 10
-early_stop_round = 3
-batch_size = 256
 
-algo = 'pnn1'
-ratio = 1  # neg to pos ratio for OversamplingBatchGenerator
-```
+**label column:** "TARGET_S_TO_S_APPLE"
+
+### Split IDs and their contents (produced via handset_model_current.py):
+* id=1: all features
+  * dropped: ['Unnamed: 0', 'ID', 'MPP_NET_DISCOUNT_OTHER_FEE']
+  * categorical and binary encoded as -1/1
+  * standardized numerical
+
+standardized numerical and categorical/binary encoded as 0/1:
+* id=2: sklearn selectKBest w/ f_classif features
+* id=3: all cat features
+* id=4: all features selected in feature_selection directory
+* id=5: f_classif features, cat vars without any encoding
+* id=6: features from COLS_TERM (look in handset_model_current.py)
+
+note: refer to features in the feature_selection directory
 
 ---
-## Using OversamplingBatchGenerator (from handset_model_copy4.py) in main.py
-```py
-gen = handset_model_copy4.OverSamplingBatchGenerator(data_train_dict, batch_size=batch_size, r=1)
-```
-Replace 
-```py
-X_i, y_i = utils.slice(train_data, j * batch_size, batch_size)
-``` 
-with
-```py
-n = next(gen.generator())
-n_cat = n[0][1]
 
-if algo in {'fnn', 'ccpm', 'pnn1', 'pnn2'}:
-    fields = utils.split_data_gen(n_cat)  # slight modification of utils.split_data
-    
-    X_i = []
-    for f in fields:
-        w = np.where(f==1)
-        indices = [[w[0][i], w[1][i]] for i in range(len(w[0]))]
-
-        indices = np.array(indices, dtype='int32')
-        values = np.array([1 for i in range(len(indices))])
-        shape = f.shape
-        X_i.append((indices, values, shape))
-else:
-    w = np.where(n_cat==1)
-    indices = [[w[0][i], w[1][i]] for i in range(len(w[0]))]
-
-    indices = np.array(indices, dtype='int32')
-    values = np.array([1 for i in range(len(indices))])
-    shape = n_cat.shape
-    X_i = (indices, values, shape)
-
-y_i = np.reshape(n[1], -1).astype(int)
-```
-inside the j loop in train(model)
+note: handset_model_original.py was written for python 2.7 while handset_model_current.py has been debugged (and further modified) for python 3.6

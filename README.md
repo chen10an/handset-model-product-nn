@@ -9,6 +9,7 @@ This repository explores a binary classification problem through...
 5. **product-based neural networks (pnn)** (main focus)
 
 _note 1: the relevant papers are included in the papers directory_
+
 _note 2: the company data has not been included in this repository_
 
 For an **overview**, refer to the presentation directory.
